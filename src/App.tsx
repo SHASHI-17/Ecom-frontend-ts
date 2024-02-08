@@ -39,9 +39,7 @@ const TransactionManagement = lazy(
 
 const App = () => {
   const dispatch = useDispatch();
-  const { user, loading } = useSelector(
-    (state: { userReducer: userReducerIntialState }) => state.userReducer
-  );
+  const { user, loading } = useSelector((state: { userReducer: userReducerIntialState }) => state.userReducer);
 
   useEffect(() => {
     onAuthStateChanged(auth, async (user) => {

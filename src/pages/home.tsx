@@ -1,16 +1,27 @@
-import { Link } from "react-router-dom"
-import ProductCard from "../components/Product-card"
+import toast from "react-hot-toast";
+import { Link } from "react-router-dom";
+import ProductCard from "../components/Product-card";
+import { Skeleton } from "../components/admin/Loader";
+import { useLatestProductsQuery } from "../redux/api/productAPI";
 
 const Home = () => {
+
+  const {data,isLoading,isError}=useLatestProductsQuery("");
+
+  if(isError) toast.error("Cannot Fetch the Products")
+
   const addToCartHandler =()=>{};
   return (
     <div className="home">
       <section></section>
       <h1>Latest Products <Link to='/search' className="findmore">More</Link></h1>
       <main>
-        <ProductCard productId="sgd" name="safdg" 
-        price={1321} stock={231} 
-        photo="https://rukminim2.flixcart.com/image/416/416/kp5sya80/screen-guard/tempered-glass/o/v/n/apple-macbook-air-m1-13-3-inch-lightwings-original-imag3gh5xftgbpg3.jpeg?q=70&crop=false" handler={addToCartHandler} />
+        { isLoading ? <Skeleton width="80vw" /> :
+          data?.products.map((i)=>(
+            <ProductCard key={i._id} productId={i._id} name={i.name}
+             price={i.price} stock={i.stock} photo={i.photo} handler={addToCartHandler} />
+          ))
+        }
       </main>
     </div>
   )

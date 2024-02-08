@@ -1,4 +1,5 @@
 import { FaPlus } from "react-icons/fa";
+import { server } from "../redux/store";
 
 type ProductsProps={
   productId:string,
@@ -9,11 +10,9 @@ type ProductsProps={
   handler:()=>void;
 }
 
-const server="dasf"
-
 const ProductCard = ({photo,price,productId,name,stock,handler}:ProductsProps) => {
   return <div className="product-card">
-    <img src={`${photo}`} alt={name} />
+    <img src={`${server}/${photo}`} alt={name} />
     <p>{name}</p>
     <span>₹{price}</span>
     <div onClick={()=>handler()}>

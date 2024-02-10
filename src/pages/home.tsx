@@ -3,14 +3,21 @@ import { Link } from "react-router-dom";
 import ProductCard from "../components/Product-card";
 import { Skeleton } from "../components/admin/Loader";
 import { useLatestProductsQuery } from "../redux/api/productAPI";
+import { CartItem } from "../types/types";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/reducer/cartReducer";
 
 const Home = () => {
-
+  const dispatch=useDispatch();
   const {data,isLoading,isError}=useLatestProductsQuery("");
 
   if(isError) toast.error("Cannot Fetch the Products")
 
-  const addToCartHandler =()=>{};
+  const addToCartHandler =(cartItem:CartItem)=>{
+    if(cartItem.stock < 1) return toast.error('Out of Stock');
+    dispatch(addToCart(cartItem));
+    toast.success('Added to cart')
+  };
   return (
     <div className="home">
       <section></section>

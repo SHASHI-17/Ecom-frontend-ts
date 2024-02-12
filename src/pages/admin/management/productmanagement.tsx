@@ -8,7 +8,7 @@ import {
   useProductDetailsQuery,
   useUpdateProductMutation,
 } from "../../../redux/api/productAPI";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { server } from "../../../redux/store";
 import { Skeleton } from "../../../components/admin/Loader";
 import { responseToast } from "../../../utils/features";
@@ -21,7 +21,7 @@ const Productmanagement = () => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const { data, isLoading } = useProductDetailsQuery(params.id!);
+  const { data, isLoading ,isError} = useProductDetailsQuery(params.id!);
 
   const { price, photo, name, stock, category } = data?.product || {
     _id: "",
@@ -36,7 +36,7 @@ const Productmanagement = () => {
   const [stockUpdate, setStockUpdate] = useState<number>(stock);
   const [nameUpdate, setNameUpdate] = useState<string>(name);
   const [categoryUpdate, setCategoryUpdate] = useState<string>(category);
-  const [photoUpdate, setPhotoUpdate] = useState<string>('');
+  const [photoUpdate, setPhotoUpdate] = useState<string>("");
   const [photoFile, setPhotoFile] = useState<File>();
 
   const [updateProduct] = useUpdateProductMutation();
@@ -75,8 +75,7 @@ const Productmanagement = () => {
     responseToast(res, navigate, "/admin/product");
   };
 
-  const deleteHandler = async ()=> {
-
+  const deleteHandler = async () => {
     const res = await deleteProduct({
       userId: user?._id!,
       productId: data?.product._id!,
@@ -93,12 +92,14 @@ const Productmanagement = () => {
     }
   }, [data]);
 
+  if (isError) return <Navigate to={"/404"} />;
+
   return (
     <div className="admin-container">
       <AdminSidebar />
       <main className="product-management">
         {isLoading ? (
-          <Skeleton />
+          <Skeleton length={20}/>
         ) : (
           <>
             <section>

@@ -10,6 +10,9 @@ import { Skeleton } from "../../components/admin/Loader";
 import { useStatsQuery } from "../../redux/api/dashboardAPI";
 import { RootState } from "../../redux/store";
 import { Navigate } from "react-router-dom";
+import { getLastMonths } from "../../utils/features";
+
+const { last6Months } = getLastMonths();
 
 const Dashboard = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
@@ -17,7 +20,7 @@ const Dashboard = () => {
 
   const stats = data?.stats!;
 
-  if (isError) return <Navigate to={'/'} />
+  if (isError) return <Navigate to={"/"} />;
 
   return (
     <div className="admin-container">
@@ -44,7 +47,7 @@ const Dashboard = () => {
               />
               <WidgetItem
                 percent={stats.changePercent.user}
-                value={stats.counts.user}  
+                value={stats.counts.user}
                 color="rgb(0 198 202)"
                 heading="Users"
               />
@@ -67,6 +70,7 @@ const Dashboard = () => {
               <div className="revenue-chart">
                 <h2>Revenue & Transaction</h2>
                 <BarChart
+                  labels={last6Months}
                   data_1={stats.chart.revenue}
                   data_2={stats.chart.order}
                   title_1="Revenue"
@@ -81,7 +85,7 @@ const Dashboard = () => {
 
                 <div>
                   {stats.categoryCount.map((i) => {
-                    const [heading,value] = Object.entries(i)[0];
+                    const [heading, value] = Object.entries(i)[0];
                     return (
                       <CategoryItem
                         key={heading}
@@ -100,7 +104,7 @@ const Dashboard = () => {
                 <h2>Gender Ratio</h2>
                 <DoughnutChart
                   labels={["Female", "Male"]}
-                  data={[stats.userRatio.female,stats.userRatio.male]}
+                  data={[stats.userRatio.female, stats.userRatio.male]}
                   backgroundColor={[
                     "hsl(340, 82%, 56%)",
                     "rgba(53, 162, 235, 0.8)",
@@ -141,11 +145,14 @@ const WidgetItem = ({
       <h4>{amount ? `₹${value}` : value}</h4>
       {percent > 0 ? (
         <span className="green">
-          <HiTrendingUp /> +{percent > 0 && `${percent > 10000 ? 9999 : percent}%`}{""}
+          <HiTrendingUp /> +
+          {percent > 0 && `${percent > 10000 ? 9999 : percent}%`}
+          {""}
         </span>
       ) : (
         <span className="red">
-          <HiTrendingDown /> {percent < 0 && `${percent > -10000 ? -9999 : percent}%`}{" "}
+          <HiTrendingDown />{" "}
+          {percent < 0 && `${percent > -10000 ? -9999 : percent}%`}{" "}
         </span>
       )}
     </div>

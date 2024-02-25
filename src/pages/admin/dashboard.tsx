@@ -1,4 +1,3 @@
-import toast from "react-hot-toast";
 import { BiMaleFemale } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { FaRegBell } from "react-icons/fa";
@@ -10,18 +9,15 @@ import Table from "../../components/admin/DashboardTable";
 import { Skeleton } from "../../components/admin/Loader";
 import { useStatsQuery } from "../../redux/api/dashboardAPI";
 import { RootState } from "../../redux/store";
-import { CustomError } from "../../types/api-types";
+import { Navigate } from "react-router-dom";
 
 const Dashboard = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
-  const { data, isLoading, isError, error } = useStatsQuery(user?._id!);
+  const { data, isLoading, isError } = useStatsQuery(user?._id!);
 
   const stats = data?.stats!;
 
-  if (isError) {
-    const err = error as CustomError;
-    toast.error(err.data.message);
-  }
+  if (isError) return <Navigate to={'/'} />
 
   return (
     <div className="admin-container">

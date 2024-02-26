@@ -108,7 +108,7 @@ const Search = () => {
           <article>
             <button
               disabled={isPrevPage}
-              onClick={(e) => setPage((prev) => prev - 1)}
+              onClick={() => setPage((prev) => prev - 1)}
             >
               prev
             </button>
@@ -117,7 +117,7 @@ const Search = () => {
             </span>
             <button
               disabled={isNextPage}
-              onClick={(e) => setPage((prev) => prev + 1)}
+              onClick={() => setPage((prev) => prev + 1)}
             >
               next
             </button>
